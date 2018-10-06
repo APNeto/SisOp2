@@ -7,11 +7,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
-#define PORT 4000
+#include <pthread.h>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
+    if(argc != 4){
+        std::cout << "Argumentos fornecidos nao correspondentes. Formato aceito: \n" <<
+            "./myClient <username> <server_ip_address> <port>\n";
+        exit(1);
+    }
+
+    int PORT = atoi(argv[3]);;
+
     int sockfd, n;
 	unsigned int length;
 	struct sockaddr_in serv_addr, from;
@@ -24,7 +32,7 @@ int main(int argc, char *argv[])
 
 	}
 	
-	server = gethostbyname(argv[1]);
+	server = gethostbyname(argv[2]);
 	if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
         exit(0);

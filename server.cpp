@@ -6,6 +6,8 @@
 #include <string.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <pthread.h>
+#include <iostream>
 
 #define PORT 4000
 
