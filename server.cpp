@@ -50,8 +50,11 @@ int main(int argc, char *argv[])
 		n = sendto(sockfd, "Got your message\n", 17, 0,(struct sockaddr *) &cli_addr, sizeof(struct sockaddr));
 		if (n  < 0) 
 			printf("ERROR on sendto");
+
+//****** Cria thread
+		pthread_create(&sync_info.thr_send[device.device_id], nullptr, send_to_client, &device);
++    	pthread_create(&sync_info.thr_recv[device.device_id], nullptr, recv_from_client, &device)
 	}
-	
 	close(sockfd);
 	return 0;
 }
