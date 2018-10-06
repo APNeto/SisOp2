@@ -11,8 +11,14 @@
 #include <iostream>
 #include <string>
 
-int uploadfile(){return 0;}
-int downloadfile(){return 0;}
+int uploadfile(){
+	std::cout<<"Em uploadfile"<< std::endl;
+	return 0;
+	}
+int downloadfile(){
+	std::cout<<"Em downloadfile"<< std::endl;
+	return 0;
+	}
 int deletefile(){return 0;}
 int list_server(){return 0;}
 int list_client(){return 0;}
@@ -74,16 +80,28 @@ int main(int argc, char *argv[])
 	printf("Got an ack: %s\n", buffer);
 
 	while(1){
-		switch(comand){
-			case "upload": uploadfile(); break;
-			case "download": downloadfile(); break;
-			case "delete": deletefile(); break;
-			case "list_client": list_client(); break;
-			case "list_server": list_server(); break;
-			case "get_sync_dir": get_sync_dir(); break;
-			case "exit": exit(); break;
-			default: std::cout << "Comando invalido\n";
+		if(comand == "upload"){
+			uploadfile(); continue;
 		}
+		if(comand == "download"){
+			downloadfile(); continue;
+		}
+		if(comand == "delete"){
+			deletefile(); continue;
+		}
+		if(comand == "list_client"){
+			list_client(); continue;
+		}
+		if(comand == "list_server"){
+			list_server(); continue;
+		}
+		if(comand == "get_sync_dir"){
+			get_sync_dir(); continue;
+		}
+		if(comand == "exit"){
+			exit(); continue;
+		}
+		std::cout << "Comando invalido\n";
 	}
 	
 	close(sockfd);
