@@ -25,9 +25,13 @@ int list_client(){return 0;}
 int get_sync_dir(){return 0;}
 int exit(){return 0;}
 
+
+
+char username[MAXNAME];
+char path_to_syncdir[MAXNAME*2];
 int main(int argc, char *argv[])
 {
-    if(argc != 4){
+    if(argc < 4){
         std::cout << "Argumentos fornecidos nao correspondentes. Formato aceito: \n" <<
             "./myClient <username> <server_ip_address> <port>\n";
         exit(1);
@@ -39,19 +43,14 @@ int main(int argc, char *argv[])
 	unsigned int length;
 	struct sockaddr_in serv_addr, from;
 	struct hostent *server;
+	char hostname[MAXNAME];
+	uint16_t port;
+
+	strcpy(username, argv[1]);
+    strcpy(hostname, argv[2]);
+    port = atoi(argv[3]);
 	
 	char buffer[256];
-	if (argc < 2) {
-		fprintf(stderr, "usage %s hostname\n", argv[0]);
-		exit(0);
-
-	}
-	
-	server = gethostbyname(argv[2]);
-	if (server == NULL) {
-        fprintf(stderr,"ERROR, no such host\n");
-        exit(0);
-    }
 
 	std::string comand;
 	std::cin >> comand;
