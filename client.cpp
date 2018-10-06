@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
 
 	strcpy(username, argv[1]);
     strcpy(hostname, argv[2]);
-    port = atoi(argv[3]);
 	
 	char buffer[256];
 
