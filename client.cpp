@@ -25,7 +25,7 @@ int list_client(){return 0;}
 int get_sync_dir(){return 0;}
 int exit(){return 0;}
 
-
+#define MAXNAME 256
 
 char username[MAXNAME];
 char path_to_syncdir[MAXNAME*2];
