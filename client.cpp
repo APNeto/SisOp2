@@ -25,8 +25,6 @@ int list_client(){return 0;}
 int get_sync_dir(){return 0;}
 int exit(){return 0;}
 
-
-
 char username[MAXNAME];
 char path_to_syncdir[MAXNAME*2];
 int main(int argc, char *argv[])
@@ -53,7 +51,7 @@ int main(int argc, char *argv[])
 	char buffer[256];
 
 	std::string comand;
-	std::cin >> comand;
+	std::getline(std::cin, comand);
 	
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
 		printf("ERROR opening socket");
