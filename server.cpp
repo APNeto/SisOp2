@@ -11,6 +11,14 @@
 
 #define PORT 4000
 
+int uploadfile(){return 0;}
+int downloadfile(){return 0;}
+int deletefile(){return 0;}
+int list_server(){return 0;}
+int list_client(){return 0;}
+int get_sync_dir(){return 0;}
+int exit(){return 0;}
+
 int main(int argc, char *argv[])
 {
 	int sockfd, n;
