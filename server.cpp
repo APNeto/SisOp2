@@ -6,18 +6,8 @@
 #include <string.h>
 #include <netdb.h>
 #include <stdio.h>
-#include <pthread.h>
-#include <iostream>
 
 #define PORT 4000
-
-int uploadfile(){return 0;}
-int downloadfile(){return 0;}
-int deletefile(){return 0;}
-int list_server(){return 0;}
-int list_client(){return 0;}
-int get_sync_dir(){return 0;}
-int exit(){return 0;}
 
 int main(int argc, char *argv[])
 {
@@ -50,11 +40,8 @@ int main(int argc, char *argv[])
 		n = sendto(sockfd, "Got your message\n", 17, 0,(struct sockaddr *) &cli_addr, sizeof(struct sockaddr));
 		if (n  < 0) 
 			printf("ERROR on sendto");
-
-//****** Cria thread
-		pthread_create(&sync_info.thr_send[device.device_id], nullptr, send_to_client, &device);
-+    	pthread_create(&sync_info.thr_recv[device.device_id], nullptr, recv_from_client, &device)
 	}
+	
 	close(sockfd);
 	return 0;
 }

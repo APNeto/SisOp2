@@ -42,6 +42,7 @@ int exit(){return 0;}
 
 char username[MAXNAME];
 char path_to_syncdir[MAXNAME*2];
+
 int main(int argc, char *argv[])
 {
     if(argc < 4){
@@ -50,33 +51,28 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    int PORT = atoi(argv[3]);;
-
     int sockfd, n;
 	unsigned int length;
 	struct sockaddr_in serv_addr, from;
 	struct hostent *server;
 	char hostname[MAXNAME];
-	uint16_t port;
+	uint16_t PORT;
 
 	strcpy(username, argv[1]);
     strcpy(hostname, argv[2]);
-    port = atoi(argv[3]);
+    PORT = atoi(argv[3]);
 	
 	char buffer[256];
-
-	std::string comand;
-	std::getline(std::cin, comand);
 	
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
 		printf("ERROR opening socket");
-	
-	serv_addr.sin_family = AF_INET;    
-	serv_addr.sin_port = htons(PORT);    
+	std::cout << "Opened socket\n";
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_port = htons(PORT);
 	serv_addr.sin_addr = *((struct in_addr *)server->h_addr);
-	bzero(&(serv_addr.sin_zero), 8);  
+	bzero(&(serv_addr.sin_zero), 8);
 
-	printf("Enter the message: ");
+	printf("Enter the message:\n");
 	bzero(buffer, 256);
 	fgets(buffer, 256, stdin);
 
@@ -91,30 +87,30 @@ int main(int argc, char *argv[])
 
 	printf("Got an ack: %s\n", buffer);
 
-	while(1){
-		if(comand == "upload"){
-			uploadfile(); continue;
-		}
-		if(comand == "download"){
-			downloadfile(); continue;
-		}
-		if(comand == "delete"){
-			deletefile(); continue;
-		}
-		if(comand == "list_client"){
-			list_client(); continue;
-		}
-		if(comand == "list_server"){
-			list_server(); continue;
-		}
-		if(comand == "get_sync_dir"){
-			get_sync_dir(); continue;
-		}
-		if(comand == "exit"){
-			exit(); continue;
-		}
-		std::cout << "Comando invalido\n";
-	}
+//	while(1){
+//		if(comand == "upload"){
+//			uploadfile(); continue;
+//		}
+//		if(comand == "download"){
+//			downloadfile(); continue;
+//		}
+//		if(comand == "delete"){
+//			deletefile(); continue;
+//		}
+//		if(comand == "list_client"){
+//			list_client(); continue;
+//		}
+//		if(comand == "list_server"){
+//			list_server(); continue;
+//		}
+//		if(comand == "get_sync_dir"){
+//			get_sync_dir(); continue;
+//		}
+//		if(comand == "exit"){
+//			exit(); continue;
+//		}
+//		std::cout << "Comando invalido\n";
+//	}
 
 	close(sockfd);
 	return 0;
