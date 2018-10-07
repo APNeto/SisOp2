@@ -61,9 +61,14 @@ int main(int argc, char *argv[])
 	strcpy(username, argv[1]);
     strcpy(hostname, argv[2]);
     PORT = atoi(argv[3]);
-	
+	std::cout << PORT<<"\n";
 	char buffer[256];
-	
+	server = gethostbyname(argv[2]);
+	if (server == NULL) {
+        fprintf(stderr,"ERROR, no such host\n");
+        exit(0);
+    }
+
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
 		printf("ERROR opening socket");
 	std::cout << "Opened socket\n";
@@ -71,7 +76,7 @@ int main(int argc, char *argv[])
 	serv_addr.sin_port = htons(PORT);
 	serv_addr.sin_addr = *((struct in_addr *)server->h_addr);
 	bzero(&(serv_addr.sin_zero), 8);
-
+	
 	printf("Enter the message:\n");
 	bzero(buffer, 256);
 	fgets(buffer, 256, stdin);
