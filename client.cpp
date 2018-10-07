@@ -14,16 +14,16 @@
 int uploadfile(){
 	std::cout<<"Em uploadfile"<< std::endl;
 
-	n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in));
-	if (n < 0) 
-		printf("ERROR sendto");
-	
-	length = sizeof(struct sockaddr_in);
-	n = recvfrom(sockfd, buffer, 256, 0, (struct sockaddr *) &from, &length);
-	if (n < 0)
-		printf("ERROR recvfrom");
-
-	printf("Got an ack: %s\n", buffer);
+//	n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in));
+//	if (n < 0) 
+//		printf("ERROR sendto");
+//	
+//	length = sizeof(struct sockaddr_in);
+//	n = recvfrom(sockfd, buffer, 256, 0, (struct sockaddr *) &from, &length);
+//	if (n < 0)
+//		printf("ERROR recvfrom");
+//
+//	printf("Got an ack: %s\n", buffer);
 
 	return 0;
 }
@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 
 	strcpy(username, argv[1]);
     strcpy(hostname, argv[2]);
+    port = atoi(argv[3]);
 	
 	char buffer[256];
 
