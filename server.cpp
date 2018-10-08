@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 			printf("ERROR on sendto");
 	}
 
-/************** Codigo para Upload para o servidor
+/************** Codigo para Upload para o servidor *
 //	while (1) {
 //		/* receive from socket */
 //		n = recvfrom(sockfd, buf, MAXPAYLOAD, 0, (struct sockaddr *) &cli_addr, &clilen);
