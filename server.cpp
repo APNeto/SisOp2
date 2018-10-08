@@ -7,9 +7,52 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <packet.h>
+#include <fstream>
+#include <iostream>
 
 #define PORT 4000
 #define MAXPAYLOAD 1500-4*sizeof(uint16_t)
+
+int sendfile(std::string filename) {
+			char buffer[MAXPAYLOAD];
+			std::ifstream myfile (filename, std::ifstream::in);
+			int i = 0;
+			char *memblock;
+			double size;
+			int sockfd, n;
+			struct sockaddr_in serv_addr;
+
+			if (myfile.is_open())
+			{
+				myfile.seekg(0, std::ios::end);
+				auto filesize = (double)myfile.tellg();
+				myfile.seekg(0, std::ios::beg);
+				std::cout << filesize;
+				int n;
+				int ab = (int)filesize % MAXPAYLOAD;
+				while (filesize > MAXPAYLOAD)
+				{
+					myfile.read(buffer, MAXPAYLOAD);
+					std::cout << "\nREAD:" << strlen(buffer) << "\n"
+							  << "SENT:";
+					n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+					
+					if (n < 0)  printf("ERROR sendto");
+					printf("Got an ack: %s\n", buffer);
+
+					filesize = filesize - MAXPAYLOAD;
+					std::cout << n << "\n";
+				}
+				myfile.read(buffer, MAXPAYLOAD);
+				n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+				std::cout << "HI" << std::endl;
+			}
+			else
+			{
+				printf("\nFILE NOT OPENED \n");
+			}
+}
+
 
 int main(int argc, char *argv[])
 {
