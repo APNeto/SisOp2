@@ -6,9 +6,10 @@
 #include <string.h>
 #include <netdb.h>
 #include <stdio.h>
-#include <packet.h>
+//#include <packet.h>
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 
 #define PORT 4000
 #define MAXPAYLOAD 1500-4*sizeof(uint16_t)
@@ -20,7 +21,7 @@ int sendfile(std::string filename) {
 			char *memblock;
 			double size;
 			int sockfd, n;
-			struct sockaddr_in serv_addr;
+			struct sockaddr_in cli_addr;
 
 			if (myfile.is_open())
 			{
@@ -35,7 +36,7 @@ int sendfile(std::string filename) {
 					myfile.read(buffer, MAXPAYLOAD);
 					std::cout << "\nREAD:" << strlen(buffer) << "\n"
 							  << "SENT:";
-					n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+					n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&cli_addr, sizeof(struct sockaddr_in));
 					
 					if (n < 0)  printf("ERROR sendto");
 					printf("Got an ack: %s\n", buffer);
@@ -44,15 +45,27 @@ int sendfile(std::string filename) {
 					std::cout << n << "\n";
 				}
 				myfile.read(buffer, MAXPAYLOAD);
-				n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+				n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&cli_addr, sizeof(struct sockaddr_in));
 				std::cout << "HI" << std::endl;
 			}
 			else
 			{
 				printf("\nFILE NOT OPENED \n");
+				n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&cli_addr, sizeof(struct sockaddr_in));
+				std::cout << "HI" << std::endl;
 			}
 }
 
+int receivefile(){
+
+	return 0;
+}
+
+int deletefile(std::string filename){
+	// testar se arquivo está aberto por algum processo/usuario
+	std::remove(filename.c_str());
+	return 0;
+}
 
 int main(int argc, char *argv[])
 {
