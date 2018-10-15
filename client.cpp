@@ -90,7 +90,7 @@ int downloadfile(std::string filename)
 	myfile << buffer;
 	return 0;
 }
-int deletefile()
+int deletefile(std::string filename)
 {
 	std::string filename;
 	std::cout << filename;
@@ -138,8 +138,6 @@ int get_sync_dir()
 }
 int exit()
 {
-	
-
 	return 0;
 }
 
@@ -195,12 +193,12 @@ int main(int argc, char *argv[])
 		}
 		if (comand == "download")
 		{
-			downloadfile();
+			downloadfile("texte.txt");
 			continue;
 		}
 		if (comand == "delete")
 		{
-			deletefile();
+			deletefile("teste.txt");
 			continue;
 		}
 		if (comand == "list_client")
