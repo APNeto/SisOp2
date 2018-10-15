@@ -92,7 +92,6 @@ int downloadfile(std::string filename)
 }
 int deletefile(std::string filename)
 {
-	std::string filename;
 	std::cout << filename;
 	std::cout << "Em deletefile" << std::endl;
 	// ver se arquivo existe em sync_dir
