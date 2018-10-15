@@ -13,43 +13,121 @@
 #include <fstream>
 
 #define MAXPAYLOAD 1500 - 4 * sizeof(uint16_t)
+#define MAXNAME 256
 
-int uploadfile()
+char username[MAXNAME];
+char path_to_syncdir[MAXNAME * 2];
+
+int uploadfile(std::string filename)
 {
+	char buffer[MAXPAYLOAD];
+	int sockfd, n;
+	struct sockaddr_in serv_addr;
+	int i = 0;
+	char *memblock;
+	double size;
+
 	std::cout << "Em uploadfile" << std::endl;
 
-	//	n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in));
-	//	if (n < 0)
-	//		printf("ERROR sendto");
-	//
-	//	length = sizeof(struct sockaddr_in);
-	//	n = recvfrom(sockfd, buffer, 256, 0, (struct sockaddr *) &from, &length);
-	//	if (n < 0)
-	//		printf("ERROR recvfrom");
-	//
-	//	printf("Got an ack: %s\n", buffer);
+	std::ifstream myfile(filename.c_str(), std::ifstream::in);
 
+	// avisar servidor que vamos subir arquivo com nome "filename"
+	sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+	if (myfile.is_open())
+	{
+		myfile.seekg(0, std::ios::end);
+		auto filesize = (double)myfile.tellg();
+		myfile.seekg(0, std::ios::beg);
+		std::cout << filesize;
+		int ab = (int)filesize % MAXPAYLOAD;
+		while (filesize > MAXPAYLOAD)
+		{
+			myfile.read(buffer, MAXPAYLOAD);
+			std::cout << "\nREAD:" << strlen(buffer) << "\n"
+					  << "SENT:";
+			n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+
+			if (n < 0)
+				printf("ERROR sendto");
+			printf("Got an ack: %s\n", buffer);
+
+			filesize = filesize - MAXPAYLOAD;
+			std::cout << n << "\n";
+		}
+		myfile.read(buffer, MAXPAYLOAD);
+		n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+		std::cout << "HI" << std::endl;
+	}
+	else
+	{
+		std::cout << "\nFILE COULD NOT BE OPENED \n";
+	}
 	return 0;
 }
 
-int downloadfile()
+int downloadfile(std::string filename)
 {
+	int sockfd, n;
+	char buffer[MAXPAYLOAD];
+	unsigned int length;
+	struct sockaddr_in from;
 	std::cout << "Em downloadfile" << std::endl;
+	// enviar comando e nome do arquivo para servidor
+	// receber resposta de servidor de que arquivo existe
+	// abrir arquivo em modo de escrita
+	// receber pacotes de servidor e escrever conteudo no arquivo
+	std::ofstream myfile(filename.c_str(), std::ofstream::out);
+	if(!myfile)
+	{
+		std::cerr << "Oops! File could not be opened for writing" << std::endl;
+	}
+	
+	n = recvfrom(sockfd, buffer, 256, 0, (struct sockaddr *) &from, &length);
+	if(n > 0) {
+		std::cout << "ERROR recv on downloadfile\n";
+		return -1;
+	}
+	myfile << buffer;
 	return 0;
 }
 int deletefile()
 {
+	std::string filename;
+	std::cout << filename;
 	std::cout << "Em deletefile" << std::endl;
+	// ver se arquivo existe em sync_dir
+	// apagar arquivo localmente - feito
+	// enviar comando e nome do arquivo para servidor
+	// talvez desnecessario - receber confirmacao de remocao do arquivo do servidor e informar usuario
+
+	if (remove(filename.c_str()) == 0) {
+    // success, print something
+		std::cout << "File removed from client" << std::endl;
+
+		// Pacote do tipo CMD representando comando Delete enviado ao servidor
+		//sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
+
+	} else {
+    // failure
+    std::cout << "\nCan't remove " << filename << ": "
+         << strerror(errno) << std::endl;
+	}
 	return 0;
 }
+
 int list_server()
 {
-	std::cout << "Em lis_server" << std::endl;
+	std::cout << "Em list_server" << std::endl;
+	// enviar comando para servidor
+	// obter resposta de arquivos presentes em servidor
+	// exibir lista de arquivos para usuario
 	return 0;
 }
 int list_client()
 {
 	std::cout << "Em list_client" << std::endl;
+	//abrir pasta sync_dir
+	// exibir lista de arquivos para usuario
 	return 0;
 }
 int get_sync_dir()
@@ -57,12 +135,12 @@ int get_sync_dir()
 	std::cout << "Em get_sync_dir" << std::endl;
 	return 0;
 }
-int exit() { return 0; }
+int exit()
+{
+	// chegar se ha arquivos abertos
 
-#define MAXNAME 256
-
-char username[MAXNAME];
-char path_to_syncdir[MAXNAME * 2];
+	return 0;
+}
 
 int main(int argc, char *argv[])
 {
@@ -108,54 +186,7 @@ int main(int argc, char *argv[])
 		std::getline(std::cin, comand);
 		if (comand == "upload")
 		{
-			std::ifstream myfile ("teste.txt", std::ifstream::in);
-			int i = 0;
-			char *memblock;
-			double size;
-			if (myfile.is_open())
-			{
-				myfile.seekg(0, std::ios::end);
-				auto filesize = (double)myfile.tellg();
-				myfile.seekg(0, std::ios::beg);
-				std::cout << filesize;
-				int n;
-				int ab = (int)filesize % MAXPAYLOAD;
-				while (filesize > MAXPAYLOAD)
-				{
-					myfile.read(buffer, MAXPAYLOAD);
-					std::cout << "\nREAD:" << strlen(buffer) << "\n"
-							  << "SENT:";
-					n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
-					
-					if (n < 0)  printf("ERROR sendto");
-					printf("Got an ack: %s\n", buffer);
-
-					filesize = filesize - MAXPAYLOAD;
-					std::cout << n << "\n";
-				}
-				myfile.read(buffer, MAXPAYLOAD);
-				n = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in));
-				std::cout << "HI" << std::endl;
-			}
-			else
-			{
-				printf("\nFILE NOT OPENED \n");
-			}
-			//				printf("Enter the message:\n");
-			//				bzero(buffer, 256);
-			//				fgets(buffer, 256, stdin);
-			//				n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in));
-			//				if (n < 0)
-			//					printf("ERROR sendto");
-			//
-			//				length = sizeof(struct sockaddr_in);
-			//				n = recvfrom(sockfd, buffer, 256, 0, (struct sockaddr *) &from, &length);
-			//				if (n < 0)
-			//					printf("ERROR recvfrom");
-			//
-			//				printf("Got an ack: %s\n", buffer);
-			//				//uploadfile();
-
+			uploadfile("teste.txt");
 			continue;
 		}
 		if (comand == "download")
