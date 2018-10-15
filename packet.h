@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-enum TYPE{ DATA, ACK, CMD, UP, DOWN, DEL, LIST, EXIT};
+enum TYPE{ DATA, ACK, CMD, UP, DOWN, DEL, LIST, EXIT, TRY, DENY};
 
 typedef	struct	packet{
 	uint16_t type;				//Tipo do pacote (p.ex. DATA | ACK | CMD)

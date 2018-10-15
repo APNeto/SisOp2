@@ -11,15 +11,17 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <packet.h>
 
 #define MAXPAYLOAD 1500 - 4 * sizeof(uint16_t)
 #define MAXNAME 256
 
 char username[MAXNAME];
 char path_to_syncdir[MAXNAME * 2];
-
+int cmd = 
 int uploadfile(std::string filename)
 {
+
 	char buffer[MAXPAYLOAD];
 	int sockfd, n;
 	struct sockaddr_in serv_addr;
@@ -90,6 +92,7 @@ int downloadfile(std::string filename)
 	myfile << buffer;
 	return 0;
 }
+
 int deletefile(std::string filename)
 {
 	std::cout << filename;
@@ -137,6 +140,7 @@ int get_sync_dir()
 }
 int exit()
 {
+
 	return 0;
 }
 
