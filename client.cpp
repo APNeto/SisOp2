@@ -133,11 +133,12 @@ int list_client()
 int get_sync_dir()
 {
 	std::cout << "Em get_sync_dir" << std::endl;
+	//
 	return 0;
 }
 int exit()
 {
-	// chegar se ha arquivos abertos
+	
 
 	return 0;
 }
@@ -173,10 +174,13 @@ int main(int argc, char *argv[])
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
 		printf("ERROR opening socket");
 	std::cout << "Opened socket\n";
+
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(PORT);
 	serv_addr.sin_addr = *((struct in_addr *)server->h_addr);
 	bzero(&(serv_addr.sin_zero), 8);
+
+	// get_sync_dir();
 
 	std::string comand;
 
