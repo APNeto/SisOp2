@@ -11,14 +11,14 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <packet.h>
+#include "packet.h"
 
 #define MAXPAYLOAD 1500 - 4 * sizeof(uint16_t)
 #define MAXNAME 256
 
 char username[MAXNAME];
 char path_to_syncdir[MAXNAME * 2];
-int cmd = 
+
 int uploadfile(std::string filename)
 {
 
