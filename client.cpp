@@ -162,6 +162,10 @@ int main(int argc, char *argv[])
 	PORT = atoi(argv[3]);
 	std::cout << PORT << "\n";
 	char buffer[MAXPAYLOAD];
+
+	//-----
+	//Ver melhor a parte de estabelecer conexão
+	//----=
 	server = gethostbyname(argv[2]);
 	if (server == NULL)
 	{
@@ -178,7 +182,28 @@ int main(int argc, char *argv[])
 	serv_addr.sin_addr = *((struct in_addr *)server->h_addr);
 	bzero(&(serv_addr.sin_zero), 8);
 
-	// get_sync_dir();
+	// -----
+	//Preparar o caminho pro sync_dir
+	//COMO O PORCO FEZ:
+	// const char* homedir;
+    // if ((homedir = getenv("HOME")) == nullptr) {
+    //     homedir = getpwuid(getuid())->pw_dir;
+    // }
+    // sprintf(path_to_syncdir, "%s/sync_dir_%s", homedir, username);
+    // create_dir(path_to_syncdir);
+	//^^^^^^
+	//-----
+
+	//Depois preparar o a sincronização da pasta
+
+	//Sincronização inicial
+
+	//Criação de 3 threads
+	//1º To listen on socket
+	//2º upload files
+	//3º download files
+
+	//Dps o porco chamou uma função que seria somento o while pra receber os comandos
 
 	std::string comand;
 
